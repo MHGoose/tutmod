@@ -1,0 +1,54 @@
+namespace = tutmod
+country_event = {
+	id = tutmod.1
+	hide_window = yes
+	fire_only_once = yes
+	trigger = {
+		NOT = {
+			has_global_flag = tutmod_installed
+		}
+	}
+	immediate = {
+		set_global_flag = tutmod_installed
+	}
+}
+
+# Removes military fleets, grants science ship and scientist.
+# Scopes:
+# Scope: root: country this: country
+country_event ={
+	id = tutmod.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_civic = tutmod_civic # Must have tutmod_civic
+	}
+	immediate = {
+		every_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			delete_fleet = {
+				target = this
+				kill_leader = no
+			}
+		}
+		create_leader = {
+			class = scientist
+			species = this
+		}
+		create_fleet = {
+			effect = {
+				set_owner = prev
+				create_ship = {
+					random_existing_design = science
+					graphical_culture = owner
+				}
+				set_location = {
+					target = owner.capital_scope.solar_system.starbase
+				}
+				assign_leader = last_created_leader
+			}
+		}
+	}
+}
